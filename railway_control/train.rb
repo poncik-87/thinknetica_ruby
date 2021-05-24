@@ -1,8 +1,8 @@
 class Train
-  attr_reader :speed, :carriage_count, :current_station
+  attr_reader :number, :speed, :current_station, :type, :wagons
 
-  def initialize(number, type, carriage_count)
-    @number, @type, @carriage_count, @speed = number, type, carriage_count, 0
+  def initialize(number)
+    @number, @speed, @wagons = number, 0, []
   end
 
   def increase_speed(value)
@@ -13,12 +13,12 @@ class Train
     @speed = 0
   end
 
-  def attach_carriage
-    self.carriage_count += 1 if speed == 0
+  def add_wagon(wagon)
+    wagons.push(wagon) if wagon.type == type && !wagons.include?(wagon)
   end
 
-  def dettach_carriage
-    self.carriage_count -= 1 if speed == 0 && carriage_count > 0
+  def remove_wagon(wagon)
+    wagons.delete(wagon)
   end
 
   def route=(route)
@@ -26,6 +26,21 @@ class Train
     self.station = route.stations.first
   end
 
+  def move_prev_station
+    self.station = prev_station
+  end
+
+  def move_next_station
+    self.station = next_station
+  end
+
+  protected
+
+=begin
+Интерфейс управления станцией поезда включает ф-ции move_prev_station, move_next_station.
+Назначать станцию напрямую нельзя, т.к. это может привести к неконсистентному
+состоянию (станция не относящаяся к пути, по которому движется поезд)
+=end
   def station=(station)
     if (current_station == station)
       return
@@ -39,14 +54,12 @@ class Train
     @current_station = station
   end
 
-  def move_prev_station
-    self.station = prev_station
-  end
+  private
 
-  def move_next_station
-    self.station = next_station
-  end
-
+=begin
+prev_station, next_station являются приватными, т.к. логически определение
+соседних станций не является функцией поезда, а значит не должно быть частью api
+=end
   def prev_station
     @route.stations[@route.stations.find_index(current_station) - 1]
   end
