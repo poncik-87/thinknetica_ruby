@@ -6,14 +6,14 @@ class Station
   end
 
   def add_train(train)
-    @trains.push (train) if !@trains.include?(train)
+    trains.push (train) if !trains.include?(train)
   end
 
   def remove_train(train)
-    @trains.delete(train)
+    trains.delete(train)
   end
 
   def trains_by_type(type)
-    @trains.filter {|train| train.type == type}
+    trains.filter {|train| train.type == type}
   end
 end

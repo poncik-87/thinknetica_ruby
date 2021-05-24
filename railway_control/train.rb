@@ -14,11 +14,11 @@ class Train
   end
 
   def attach_carriage
-    @carriage_count += 1 if @speed == 0
+    self.carriage_count += 1 if speed == 0
   end
 
   def dettach_carriage
-    @carriage_count -= 1 if @speed == 0 && @carriage_count > 0
+    self.carriage_count -= 1 if speed == 0 && carriage_count > 0
   end
 
   def route=(route)
@@ -27,12 +27,12 @@ class Train
   end
 
   def station=(station)
-    if (@current_station == station)
+    if (current_station == station)
       return
     end
 
-    if (@current_station)
-      @current_station.remove_train(self)
+    if (current_station)
+      current_station.remove_train(self)
     end
 
     station.add_train(self)
@@ -48,10 +48,10 @@ class Train
   end
 
   def prev_station
-    @route.stations[@route.stations.find_index(@current_station) - 1]
+    @route.stations[@route.stations.find_index(current_station) - 1]
   end
 
   def next_station
-    @route.stations[@route.stations.find_index(@current_station) + 1]
+    @route.stations[@route.stations.find_index(current_station) + 1]
   end
 end
