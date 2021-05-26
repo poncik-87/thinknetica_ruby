@@ -17,7 +17,7 @@ class Train
     wagons.push(wagon) if wagon.type == type && !wagons.include?(wagon)
   end
 
-  def remove_wagon(wagon)
+  def delete_wagon(wagon)
     wagons.delete(wagon)
   end
 

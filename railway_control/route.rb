@@ -3,6 +3,10 @@ class Route
     @start_station, @end_station, @mid_stations = start_station, end_station, []
   end
 
+  def name
+    "#{@start_station.name} - #{@end_station.name}"
+  end
+
   def add_mid_station(station)
     @mid_stations.push(station) if !@mid_stations.include?(station)
   end
