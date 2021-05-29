@@ -5,8 +5,15 @@ class Train
 
   attr_reader :number, :speed, :current_station, :type, :wagons
 
+  @@all = []
+
   def initialize(number = Random.new_seed.to_s)
     @number, @speed, @wagons = number, 0, []
+    @@all << self
+  end
+
+  def self.find(number)
+    @@all.detect{|train| train.number == number}
   end
 
   def increase_speed(value)

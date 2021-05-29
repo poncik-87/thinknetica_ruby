@@ -93,10 +93,6 @@ class Menu
     train
   end
 
-  def train_by_number(number)
-    @trains.detect{|train| train.number == number}
-  end
-
   def make_route
     puts "Введите название начальной станции"
     start_station_name = gets.chomp
@@ -134,7 +130,7 @@ class Menu
     number = gets.chomp
 
     return "Введен некорректный номер, поезд не создан\n\n" if number.empty?
-    return puts "Поезд с таким номером уже существует\n\n" if train_by_number(number)
+    return puts "Поезд с таким номером уже существует\n\n" if Train.find(number)
 
     puts "Введите тип поезда: 1. грузовой 2. пассажирский"
     type_idx = gets.chomp.to_i
@@ -192,7 +188,7 @@ class Menu
   def ask_train
     puts "Введите номер поезда"
     number = gets.chomp
-    train = train_by_number(number)
+    train = Train.find(number)
     return puts "Поезд не найден\n\n" if train.nil?
     train
   end
