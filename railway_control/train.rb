@@ -1,7 +1,9 @@
 require "./manufacturer"
+require "./instance_counter"
 
 class Train
   include Manufacturer
+  include InstanceCounter
 
   attr_reader :number, :speed, :current_station, :type, :wagons
 
@@ -10,6 +12,7 @@ class Train
   def initialize(number = Random.new_seed.to_s)
     @number, @speed, @wagons = number, 0, []
     @@all << self
+    register_instance
   end
 
   def self.find(number)
