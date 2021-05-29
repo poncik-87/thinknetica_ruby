@@ -5,7 +5,7 @@ class Train
 
   attr_reader :number, :speed, :current_station, :type, :wagons
 
-  def initialize(number)
+  def initialize(number = Random.new_seed.to_s)
     @number, @speed, @wagons = number, 0, []
   end
 
