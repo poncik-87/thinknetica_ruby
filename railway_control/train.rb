@@ -1,4 +1,8 @@
+require "./manufacturer"
+
 class Train
+  include Manufacturer
+
   attr_reader :number, :speed, :current_station, :type, :wagons
 
   def initialize(number)
