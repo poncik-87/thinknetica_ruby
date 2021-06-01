@@ -129,7 +129,6 @@ class Menu
     puts "Введите номер поезда"
     number = gets.chomp
 
-    return "Введен некорректный номер, поезд не создан\n\n" if number.empty?
     return puts "Поезд с таким номером уже существует\n\n" if Train.find(number)
 
     puts "Введите тип поезда: 1. грузовой 2. пассажирский"

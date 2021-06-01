@@ -1,9 +1,13 @@
 require "./manufacturer"
 require "./instance_counter"
+require "./validate"
+
+NUMBER_FORMAT = /^[а-я\d]{3}-?[а-я\d]{2}$/i
 
 class Train
   include Manufacturer
   include InstanceCounter
+  include Validate
 
   attr_reader :number, :speed, :current_station, :type, :wagons
 
@@ -12,6 +16,7 @@ class Train
   def initialize(number = Random.new_seed.to_s)
     @number, @speed, @wagons = number, 0, []
     @@all << self
+    validate!
     register_instance
   end
 
@@ -80,5 +85,11 @@ prev_station, next_station являются приватными, т.к. лог�
 
   def next_station
     @route.stations[@route.stations.find_index(current_station) + 1]
+  end
+
+  def validate!
+    raise "Номер поезда должен быть строкой" if number.class != String
+    raise "Номер поезда должен быть непустым" if number.empty?
+    raise "Неверный формат номера поезда" if number !~ NUMBER_FORMAT
   end
 end

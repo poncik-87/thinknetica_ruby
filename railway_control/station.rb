@@ -1,7 +1,9 @@
 require "./instance_counter"
+require "./validate"
 
 class Station
   include InstanceCounter
+  include Validate
 
   attr_reader :trains, :name
 
@@ -10,6 +12,7 @@ class Station
   def initialize(name)
     @name, @trains = name, []
     @@all << self
+    validate!
     register_instance
   end
 
@@ -27,5 +30,12 @@ class Station
 
   def trains_by_type(type)
     trains.filter {|train| train.type == type}
+  end
+
+  private
+
+  def validate!
+    raise "Имя должно быть строкой" if name.class != String
+    raise "Имя должно быть непустым" if name.empty?
   end
 end
