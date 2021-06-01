@@ -126,20 +126,32 @@ class Menu
   end
 
   def make_train
-    puts "Введите номер поезда"
-    number = gets.chomp
+    attempt = 0
 
-    return puts "Поезд с таким номером уже существует\n\n" if Train.find(number)
+    begin
+      puts "Введите номер поезда"
+      number = gets.chomp
 
-    puts "Введите тип поезда: 1. грузовой 2. пассажирский"
-    type_idx = gets.chomp.to_i
-    type = [:cargo, :passenger][type_idx - 1]
+      raise "Поезд с таким номером уже существует" if Train.find(number)
 
-    train = create_train(number, type)
+      puts "Введите тип поезда: 1. грузовой 2. пассажирский"
+      type_idx = gets.chomp.to_i
+      type = [:cargo, :passenger][type_idx - 1]
 
-    return puts "Введен неверный тип поезда\n\n" if !train
+      train = create_train(number, type)
 
-    puts "Поезд создан\n\n"
+      raise "Введен неверный тип поезда" if !train
+
+      puts "Поезд создан\n\n"
+    rescue StandardError => e
+      attempt += 1
+      puts "Поезд не создан. Причина: #{e.message}\n\n"
+
+      if attempt < 3
+        puts "Попробуйте снова"
+        retry
+      end
+    end
   end
 
   def list_routes
