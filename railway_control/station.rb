@@ -35,7 +35,9 @@ class Station
   private
 
   def validate!
-    raise "Имя должно быть строкой" if name.class != String
-    raise "Имя должно быть непустым" if name.empty?
+    errors = []
+    errors << "Имя должно быть строкой" if name.class != String
+    errors << "Имя должно быть непустым" if name.empty?
+    raise errors.join('. ') if !errors.empty?
   end
 end

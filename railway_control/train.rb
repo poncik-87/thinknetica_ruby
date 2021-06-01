@@ -88,8 +88,10 @@ prev_station, next_station являются приватными, т.к. лог�
   end
 
   def validate!
-    raise "Номер поезда должен быть строкой" if number.class != String
-    raise "Номер поезда должен быть непустым" if number.empty?
-    raise "Неверный формат номера поезда" if number !~ NUMBER_FORMAT
+    errors = []
+    errors << "Номер поезда должен быть строкой" if number.class != String
+    errors << "Номер поезда должен быть непустым" if number.empty?
+    errors << "Неверный формат номера поезда" if number !~ NUMBER_FORMAT
+    raise errors.join('. ') if !errors.empty?
   end
 end
