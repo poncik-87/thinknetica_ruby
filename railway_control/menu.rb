@@ -24,7 +24,9 @@ class Menu
     puts "10. Назначить маршрут поезду"
     puts "11. Добавить вагон к поезду"
     puts "12. Отцепить вагон от поезда"
-    puts "13. Переместить поезд"
+    puts "13. Посмотреть вагоны поезда"
+    puts "14. Занять место в вагоне"
+    puts "15. Переместить поезд"
     puts "для выхода введите 'стоп'"
 
     gets.chomp
@@ -57,6 +59,10 @@ class Menu
     when "12"
       dettach_wagon
     when "13"
+      list_train_wagons
+    when "14"
+      occupy_train_wagon
+    when "15"
       move_train
     else
       puts "Введено некорректное значение меню\n\n"
@@ -209,8 +215,10 @@ class Menu
     return if station.nil?
     return puts "На станции нет поездов\n\n" if station.trains.empty?
 
-    puts "Список поездов на станции #{station.name}: "
-    station.trains.each{|train| puts train.number}
+    puts "Список поездов на станции #{station.name}:"
+    station.trains.each do |train|
+      puts "Номер: #{train.number}, тип: #{train.type.to_s}, количество вагонов: #{train.wagons.length}"
+    end
     puts ""
   end
 
@@ -254,8 +262,17 @@ class Menu
     train = ask_train
     return if train.nil?
 
-    train.add_wagon(CargoWagon.new) if train.type == :cargo
-    train.add_wagon(PassengerWagon.new) if train.type == :passenger
+    if (train.type == :cargo)
+      puts "Введите объем вагона"
+      volume = gets.chomp.to_i
+      train.add_wagon(CargoWagon.new(volume))
+    end
+
+    if (train.type == :passenger)
+      puts "Введите количество мест в вагоне"
+      seats = gets.chomp.to_i
+      train.add_wagon(PassengerWagon.new(seats))
+    end
 
     puts "Вагон добавлен к поезду\n\n"
   end
@@ -263,11 +280,46 @@ class Menu
   def dettach_wagon
     train = ask_train
     return if train.nil?
-    return puts "У поезда нет вагонов/n/n" if train.wagons.empty?
+    return puts "У поезда нет вагонов\n\n" if train.wagons.empty?
 
     train.delete_wagon(train.wagons.last)
 
     puts "Вагон удален\n\n"
+  end
+
+  def list_train_wagons
+    train = ask_train
+    return if train.nil?
+    return puts "У поезда нет вагонов\n\n" if train.wagons.empty?
+
+    puts "Список вагонов поезда #{train.number}:"
+    train.each_wagon do |wagon, number|
+      puts "#{number}: #{wagon.type.to_s}. #{wagon.report}"
+    end
+    puts ""
+  end
+
+  def occupy_train_wagon
+    train = ask_train
+    return if train.nil?
+    return puts "У поезда нет вагонов\n\n" if train.wagons.empty?
+
+    puts "Введите номер вагона"
+    number = gets.chomp.to_i
+    wagon = train.wagons[number - 1]
+    return puts "Неверный номер вагона\n\n" if wagon.nil?
+
+    if (wagon.type == :cargo)
+      puts "Введите значение объема"
+      volume = gets.chomp.to_i
+      wagon.occupy_volume(volume)
+      puts "Объем занят\n\n"
+    end
+
+    if (wagon.type == :passenger)
+      wagon.occupy_seat
+      puts "Место занято\n\n"
+    end
   end
 
   def ask_train_direction

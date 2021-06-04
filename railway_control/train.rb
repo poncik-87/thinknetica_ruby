@@ -36,8 +36,8 @@ class Train
     wagons.push(wagon) if wagon.type == type && !wagons.include?(wagon)
   end
 
-  def delete_wagon(wagon)
-    wagons.delete(wagon)
+  def each_wagon
+    @wagons.each_index {|index| yield(@wagons[index], index)}
   end
 
   def route=(route)
