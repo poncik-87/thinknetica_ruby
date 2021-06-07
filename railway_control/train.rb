@@ -1,8 +1,10 @@
-require "./manufacturer"
-require "./instance_counter"
-require "./validate"
+# frozen_string_literal: true
 
-NUMBER_FORMAT = /^[а-я\d]{3}-?[а-я\d]{2}$/i
+require './manufacturer'
+require './instance_counter'
+require './validate'
+
+NUMBER_FORMAT = /^[а-я\d]{3}-?[а-я\d]{2}$/i.freeze
 
 class Train
   include Manufacturer
@@ -14,14 +16,16 @@ class Train
   @@all = []
 
   def initialize(number = Random.new_seed.to_s)
-    @number, @speed, @wagons = number, 0, []
+    @number = number
+    @speed = 0
+    @wagons = []
     @@all << self
     validate!
     register_instance
   end
 
   def self.find(number)
-    @@all.detect{|train| train.number == number}
+    @@all.detect { |train| train.number == number }
   end
 
   def increase_speed(value)
@@ -37,7 +41,7 @@ class Train
   end
 
   def each_wagon
-    @wagons.each_index {|index| yield(@wagons[index], index)}
+    @wagons.each_index { |index| yield(@wagons[index], index) }
   end
 
   def route=(route)
@@ -55,19 +59,13 @@ class Train
 
   protected
 
-=begin
-Интерфейс управления станцией поезда включает ф-ции move_prev_station, move_next_station.
-Назначать станцию напрямую нельзя, т.к. это может привести к неконсистентному
-состоянию (станция не относящаяся к пути, по которому движется поезд)
-=end
+  # Интерфейс управления станцией поезда включает ф-ции move_prev_station, move_next_station.
+  # Назначать станцию напрямую нельзя, т.к. это может привести к неконсистентному
+  # состоянию (станция не относящаяся к пути, по которому движется поезд)
   def station=(station)
-    if (current_station == station)
-      return
-    end
+    return if current_station == station
 
-    if (current_station)
-      current_station.remove_train(self)
-    end
+    current_station&.remove_train(self)
 
     station.add_train(self)
     @current_station = station
@@ -75,10 +73,8 @@ class Train
 
   private
 
-=begin
-prev_station, next_station являются приватными, т.к. логически определение
-соседних станций не является функцией поезда, а значит не должно быть частью api
-=end
+  # prev_station, next_station являются приватными, т.к. логически определение
+  # соседних станций не является функцией поезда, а значит не должно быть частью api
   def prev_station
     @route.stations[@route.stations.find_index(current_station) - 1]
   end
@@ -89,9 +85,9 @@ prev_station, next_station являются приватными, т.к. лог�
 
   def validate!
     errors = []
-    errors << "Номер поезда должен быть строкой" if number.class != String
-    errors << "Номер поезда должен быть непустым" if number.empty?
-    errors << "Неверный формат номера поезда" if number !~ NUMBER_FORMAT
-    raise errors.join('. ') if !errors.empty?
+    errors << 'Номер поезда должен быть строкой' if number.class != String
+    errors << 'Номер поезда должен быть непустым' if number.empty?
+    errors << 'Неверный формат номера поезда' if number !~ NUMBER_FORMAT
+    raise errors.join('. ') unless errors.empty?
   end
 end

@@ -1,5 +1,7 @@
-require "./instance_counter"
-require "./validate"
+# frozen_string_literal: true
+
+require './instance_counter'
+require './validate'
 
 class Station
   include InstanceCounter
@@ -10,7 +12,8 @@ class Station
   @@all = []
 
   def initialize(name)
-    @name, @trains = name, []
+    @name = name
+    @trains = []
     @@all << self
     validate!
     register_instance
@@ -21,7 +24,7 @@ class Station
   end
 
   def add_train(train)
-    trains.push (train) if !trains.include?(train)
+    trains.push(train) unless trains.include?(train)
   end
 
   def remove_train(train)
@@ -29,15 +32,15 @@ class Station
   end
 
   def trains_by_type(type)
-    trains.filter {|train| train.type == type}
+    trains.filter { |train| train.type == type }
   end
 
   private
 
   def validate!
     errors = []
-    errors << "Имя должно быть строкой" if name.class != String
-    errors << "Имя должно быть непустым" if name.empty?
-    raise errors.join('. ') if !errors.empty?
+    errors << 'Имя должно быть строкой' if name.class != String
+    errors << 'Имя должно быть непустым' if name.empty?
+    raise errors.join('. ') unless errors.empty?
   end
 end

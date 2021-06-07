@@ -1,4 +1,6 @@
-require "./manufacturer"
+# frozen_string_literal: true
+
+require './manufacturer'
 
 class Wagon
   include Manufacturer

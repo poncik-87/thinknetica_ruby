@@ -1,4 +1,6 @@
-class ValidateModuleException < Exception
+# frozen_string_literal: true
+
+class ValidateModuleException < RuntimeError
 end
 
 module Validate
@@ -7,13 +9,13 @@ module Validate
     true
   rescue ValidateModuleException
     raise
-  rescue
+  rescue StandardError
     false
   end
 
   private
 
   def validate!
-    raise ValidateModuleException.new "Необходимо реализовать метод 'validate!'"
+    raise ValidateModuleException, "Необходимо реализовать метод 'validate!'"
   end
 end

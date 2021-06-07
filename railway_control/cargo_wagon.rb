@@ -1,10 +1,16 @@
-require "./wagon"
+# frozen_string_literal: true
+
+require './wagon'
 
 class CargoWagon < Wagon
   attr_reader :occupied_volume
 
   def initialize(volume)
-    @type, @volume, @occupied_volume = :cargo, volume, 0
+    super
+
+    @type = :cargo
+    @volume = volume
+    @occupied_volume = 0
   end
 
   def occupy_volume(volume)

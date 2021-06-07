@@ -1,10 +1,16 @@
-require "./wagon"
+# frozen_string_literal: true
+
+require './wagon'
 
 class PassengerWagon < Wagon
   attr_reader :occupied_seats
 
   def initialize(seats)
-    @type, @seats, @occupied_seats = :passenger, seats, 0
+    super
+
+    @type = :passenger
+    @seats = seats
+    @occupied_seats = 0
   end
 
   def occupy_seat

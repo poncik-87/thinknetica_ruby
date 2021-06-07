@@ -1,13 +1,17 @@
-require "./instance_counter"
-require "./station"
-require "./validate"
+# frozen_string_literal: true
+
+require './instance_counter'
+require './station'
+require './validate'
 
 class Route
   include InstanceCounter
   include Validate
 
   def initialize(start_station, end_station)
-    @start_station, @end_station, @mid_stations = start_station, end_station, []
+    @start_station = start_station
+    @end_station = end_station
+    @mid_stations = []
     validate!
     register_instance
   end
@@ -17,8 +21,8 @@ class Route
   end
 
   def add_mid_station(station)
-    validateStation!(station)
-    @mid_stations.push(station) if !@mid_stations.include?(station)
+    validate_station!(station)
+    @mid_stations.push(station) unless @mid_stations.include?(station)
   end
 
   def remove_mid_station(station)
@@ -30,12 +34,13 @@ class Route
   end
 
   private
-  def validateStation!(station)
-    raise "Некорректный тип станции" if station.class != Station
+
+  def validate_station!(station)
+    raise 'Некорректный тип станции' if station.class != Station
   end
 
   def validate!
-    validateStation!(@start_station)
-    validateStation!(@end_station)
+    validate_station!(@start_station)
+    validate_station!(@end_station)
   end
 end

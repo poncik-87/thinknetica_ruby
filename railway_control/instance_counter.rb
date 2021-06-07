@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module InstanceCounter
   def self.included(base)
     base.extend ClassMethods
@@ -10,7 +12,8 @@ module InstanceCounter
     end
 
     private
-    #сеттер приватный, чтобы извне просто так нельзя было испортить каунтер
+
+    # сеттер приватный, чтобы извне просто так нельзя было испортить каунтер
     def instances=(value)
       @instances = value
     end
@@ -18,6 +21,7 @@ module InstanceCounter
 
   module InstanceMethods
     private
+
     def register_instance
       self.class.send(:instances=, self.class.instances + 1)
     end
