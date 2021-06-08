@@ -7,6 +7,7 @@ require './cargo_wagon'
 require './passenger_train'
 require './passenger_wagon'
 
+# rubocop:disable Metrics/ClassLength
 class Menu
   def initialize
     @routes = []
@@ -14,6 +15,7 @@ class Menu
     @trains = []
   end
 
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def menu
     puts 'Выберите действие:'
     puts '1. Создать маршрут'
@@ -35,7 +37,9 @@ class Menu
 
     gets.chomp
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
   def sub_menu(choise)
     case choise
     when '1'
@@ -72,6 +76,7 @@ class Menu
       puts "Введено некорректное значение меню\n\n"
     end
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
 
   private
 
@@ -142,6 +147,7 @@ class Menu
     puts "Станция успешно создана\n\n"
   end
 
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def make_train
     attempt = 0
 
@@ -170,6 +176,7 @@ class Menu
       retry
     end
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   def list_routes
     return puts "Список маршрутов пуст\n\n" if @routes.empty?
@@ -377,3 +384,4 @@ class Menu
     puts "Поезд перемещен\n\n"
   end
 end
+# rubocop:enable Metrics/ClassLength

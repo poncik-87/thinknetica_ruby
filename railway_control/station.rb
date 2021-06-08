@@ -9,7 +9,9 @@ class Station
 
   attr_reader :trains, :name
 
+  # rubocop:disable Style/ClassVars
   @@all = []
+  # rubocop:enable Style/ClassVars
 
   def initialize(name)
     @name = name

@@ -13,7 +13,9 @@ class Train
 
   attr_reader :number, :speed, :current_station, :type, :wagons
 
+  # rubocop:disable Style/ClassVars
   @@all = []
+  # rubocop:enable Style/ClassVars
 
   def initialize(number = Random.new_seed.to_s)
     @number = number
