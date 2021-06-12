@@ -1,13 +1,16 @@
 # frozen_string_literal: true
 
 require './instance_counter'
-require './validate'
+require './validation'
 
 class Station
   include InstanceCounter
-  include Validate
+  include Validation
 
   attr_reader :trains, :name
+
+  validate :name, :klass, klass: String
+  validate :name, :presence
 
   # rubocop:disable Style/ClassVars
   @@all = []
@@ -35,14 +38,5 @@ class Station
 
   def trains_by_type(type)
     trains.filter { |train| train.type == type }
-  end
-
-  private
-
-  def validate!
-    errors = []
-    errors << 'Имя должно быть строкой' if name.class != String
-    errors << 'Имя должно быть непустым' if name.empty?
-    raise errors.join('. ') unless errors.empty?
   end
 end

@@ -2,16 +2,20 @@
 
 require './manufacturer'
 require './instance_counter'
-require './validate'
+require './validation'
 
 NUMBER_FORMAT = /^[а-я\d]{3}-?[а-я\d]{2}$/i.freeze
 
 class Train
   include Manufacturer
   include InstanceCounter
-  include Validate
+  include Validation
 
   attr_reader :number, :speed, :current_station, :type, :wagons
+
+  validate :number, :klass, klass: String
+  validate :number, :presence
+  validate :number, :format, pattern: NUMBER_FORMAT
 
   # rubocop:disable Style/ClassVars
   @@all = []
@@ -83,13 +87,5 @@ class Train
 
   def next_station
     @route.stations[@route.stations.find_index(current_station) + 1]
-  end
-
-  def validate!
-    errors = []
-    errors << 'Номер поезда должен быть строкой' if number.class != String
-    errors << 'Номер поезда должен быть непустым' if number.empty?
-    errors << 'Неверный формат номера поезда' if number !~ NUMBER_FORMAT
-    raise errors.join('. ') unless errors.empty?
   end
 end
